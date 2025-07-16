@@ -1,11 +1,11 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
+	"id": "copy-plaintext",
+	"name": "Copy As PlainText",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "Adds a copy as plaintext command to the command palette and context menu.",
+	"author": "Finickyspider",
+	"authorUrl": "https://github.com/FinickySpider",
+	"fundingUrl": "https://github.com/FinickySpider",
 	"isDesktopOnly": false
 }
