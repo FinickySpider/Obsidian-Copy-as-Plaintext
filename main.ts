@@ -1,32 +1,13 @@
-/*
-  Install required dependencies:
-    npm install unified remark-parse strip-markdown remark-stringify remark-gfm remark-frontmatter remark-math remark-footnotes
-
-  To satisfy TS for remark plugins, create a file `modules.d.ts` in your plugin folder:
-    declare module 'remark-gfm';
-    declare module 'remark-frontmatter';
-    declare module 'remark-math';
-    declare module 'remark-footnotes';
-*/
-
 import { Plugin, Notice, Editor, PluginSettingTab, Setting, App } from "obsidian";
 import removeMd from "remove-markdown";
 
-// @ts-ignore
 import { unified } from "unified";
-// @ts-ignore
 import remarkParse from "remark-parse";
-// @ts-ignore
 import remarkGfm from "remark-gfm";
-// @ts-ignore
 import remarkFrontmatter from "remark-frontmatter";
-// @ts-ignore
 import remarkMath from "remark-math";
-// @ts-ignore
 import remarkFootnotes from "remark-footnotes";
-// @ts-ignore
 import strip from "strip-markdown";
-// @ts-ignore
 import remarkStringify from "remark-stringify";
 
 interface CopyPlainTextSettings {
@@ -67,7 +48,7 @@ export default class CopyPlaintextPlugin extends Plugin {
   settings: CopyPlainTextSettings;
 
   async onload() {
-    console.log("Copy As PlainText plugin loaded ✅");
+    //console.log("Copy As PlainText plugin loaded ✅");
     await this.loadSettings();
 
     this.addCommand({
@@ -92,7 +73,7 @@ export default class CopyPlaintextPlugin extends Plugin {
   }
 
   onunload() {
-    console.log("Copy As PlainText plugin unloaded 📴");
+    //console.log("Copy As PlainText plugin unloaded 📴");
   }
 
   async loadSettings() {
