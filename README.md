@@ -28,7 +28,7 @@
 
 ### Manual
 
-1. Download the latest ZIP from the [Releases page](#)  
+1. Download the latest ZIP from the [Releases page](https://github.com/FinickySpider/Obsidian-Copy-as-Plaintext/releases)  
 2. Extract into your vault’s plugin folder:  
 ```
 
@@ -65,7 +65,10 @@
 
 ## Screenshots
 
+### Settings Panel
 ![Settings panel](screenshots/settings.png)
+
+### Context Menu
 ![Context menu](screenshots/context-menu.png)
 
 ---
