@@ -38,17 +38,29 @@ interface CopyPlainTextSettings {
   dehighlight: boolean;
   removeForwardRefs: boolean;
   unwrapBlockMath: boolean;
+  removeListNumbers: boolean;
+  normalizeDashes: boolean;
+  stripHashtags: boolean;
+  stripMentions: boolean;
+  sanitizeMath: boolean;
+  superSimple: boolean;
 }
 
 const DEFAULT_SETTINGS: CopyPlainTextSettings = {
-  useUnified: true,
-  parseGfm: true,
-  removeFrontmatter: true,
-  removeMath: true,
-  removeFootnotes: true,
-  dehighlight: true,
-  removeForwardRefs: true,
-  unwrapBlockMath: true,
+  useUnified: false,
+  parseGfm: false,
+  removeFrontmatter: false,
+  removeMath: false,
+  removeFootnotes: false,
+  dehighlight: false,
+  removeForwardRefs: false,
+  unwrapBlockMath: false,
+  removeListNumbers: false,
+  normalizeDashes: false,
+  stripHashtags: false,
+  stripMentions: false,
+  sanitizeMath: false,
+  superSimple: true,
 };
 
 export default class CopyPlaintextPlugin extends Plugin {
@@ -99,7 +111,9 @@ export default class CopyPlaintextPlugin extends Plugin {
     }
 
     let plain: string;
-    if (this.settings.useUnified) {
+    if (this.settings.superSimple) {
+      plain = this.simpleStrip(raw);
+    } else if (this.settings.useUnified) {
       plain = this.unifiedStrip(raw);
     } else {
       plain = removeMd(raw);
@@ -112,6 +126,35 @@ export default class CopyPlaintextPlugin extends Plugin {
       console.error(err);
       new Notice("Copy failed – see console.");
     }
+  }
+
+  private simpleStrip(text: string): string {
+    let s = text;
+
+    // 1) Strip heading hashes
+    s = s.replace(/^#{1,6}\s+/gm, "");
+
+    // 2) Unwrap bold & underline
+    s = s.replace(/\*\*(.+?)\*\*/g, "$1");
+    s = s.replace(/__(.+?)__/g, "$1");
+
+    // 3) Unwrap italic
+    s = s.replace(/\*(.+?)\*/g, "$1");
+    s = s.replace(/_(.+?)_/g, "$1");
+
+    // 4) Unwrap inline code
+    s = s.replace(/`([^`\r\n]+)`/g, "$1");
+
+    // 5) Images: ![alt](url) → alt
+    s = s.replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1");
+
+    // 6) Links: [text](url) → text
+    s = s.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+
+    // 7) Collapse multiple blank lines
+    s = s.replace(/\r\n?/g, "\n").replace(/\n{3,}/g, "\n\n");
+
+    return s.trim();
   }
 
   private unifiedStrip(text: string): string {
@@ -136,7 +179,7 @@ export default class CopyPlaintextPlugin extends Plugin {
     const file = pipeline.processSync(text);
     let s = String(file);
 
-    // Always‐on cleanup:
+    // Always-on cleanup:
     // 1) Unescape any remaining backslashes
     // eslint-disable-next-line no-useless-escape
     s = s.replace(/\\([\\`*_>~\[\]()#!\+\-\.\$])/g, "$1");
@@ -155,7 +198,7 @@ export default class CopyPlaintextPlugin extends Plugin {
     // 5) Strip leading/trailing table pipes
     s = s.replace(/^\s*\|\s*/gm, "").replace(/\s*\|\s*$/gm, "");
 
-    // Feature‐gated extras:
+    // Feature-gated extras:
     if (this.settings.dehighlight) {
       // ==highlight== → highlight
       s = s.replace(/==(.+?)==/g, "$1");
@@ -167,6 +210,26 @@ export default class CopyPlaintextPlugin extends Plugin {
     if (this.settings.unwrapBlockMath) {
       // unwrap $$...$$ fences
       s = s.replace(/^\$\$\s*\n?([\s\S]*?)\n?\s*\$\$$/gm, "$1");
+    }
+    if (this.settings.removeListNumbers) {
+      // Strip leading "1. ", "2. ", etc.
+      s = s.replace(/^\d+\.\s*/gm, "");
+    }
+    if (this.settings.normalizeDashes) {
+      // ---word--- → word, collapse runs of --
+      s = s.replace(/-{2,}(.+?)-{2,}/g, "$1").replace(/-{3,}/g, "-");
+    }
+    if (this.settings.stripHashtags) {
+      // #word → word
+      s = s.replace(/#(\w+)/g, "$1");
+    }
+    if (this.settings.stripMentions) {
+      // @user → user
+      s = s.replace(/@(\w+)/g, "$1");
+    }
+    if (this.settings.sanitizeMath) {
+      // Remove LaTeX commands: \quad, \text, \int, etc.
+      s = s.replace(/\\[a-zA-Z]+/g, "");
     }
 
     return s.trim();
@@ -187,15 +250,21 @@ class CopyPlaintextSettingTab extends PluginSettingTab {
     containerEl.createEl("h2", { text: "Copy As PlainText Settings" });
 
     new Setting(containerEl)
+      .setName("Super Simple mode")
+      .setDesc("Only strip #, **bold**, *italic*, `code`, [links](url), and ![images](url)")
+      .addToggle(t =>
+        t
+          .setValue(this.plugin.settings.superSimple)
+          .onChange(async v => { this.plugin.settings.superSimple = v; await this.plugin.saveSettings(); })
+      );
+
+    new Setting(containerEl)
       .setName("Use unified pipeline")
       .setDesc("Use AST-based stripping via unified + strip-markdown")
       .addToggle(t =>
         t
           .setValue(this.plugin.settings.useUnified)
-          .onChange(async v => {
-            this.plugin.settings.useUnified = v;
-            await this.plugin.saveSettings();
-          })
+          .onChange(async v => { this.plugin.settings.useUnified = v; await this.plugin.saveSettings(); })
       );
 
     new Setting(containerEl)
@@ -204,10 +273,7 @@ class CopyPlaintextSettingTab extends PluginSettingTab {
       .addToggle(t =>
         t
           .setValue(this.plugin.settings.parseGfm)
-          .onChange(async v => {
-            this.plugin.settings.parseGfm = v;
-            await this.plugin.saveSettings();
-          })
+          .onChange(async v => { this.plugin.settings.parseGfm = v; await this.plugin.saveSettings(); })
       );
 
     new Setting(containerEl)
@@ -216,10 +282,7 @@ class CopyPlaintextSettingTab extends PluginSettingTab {
       .addToggle(t =>
         t
           .setValue(this.plugin.settings.removeFrontmatter)
-          .onChange(async v => {
-            this.plugin.settings.removeFrontmatter = v;
-            await this.plugin.saveSettings();
-          })
+          .onChange(async v => { this.plugin.settings.removeFrontmatter = v; await this.plugin.saveSettings(); })
       );
 
     new Setting(containerEl)
@@ -228,10 +291,7 @@ class CopyPlaintextSettingTab extends PluginSettingTab {
       .addToggle(t =>
         t
           .setValue(this.plugin.settings.removeMath)
-          .onChange(async v => {
-            this.plugin.settings.removeMath = v;
-            await this.plugin.saveSettings();
-          })
+          .onChange(async v => { this.plugin.settings.removeMath = v; await this.plugin.saveSettings(); })
       );
 
     new Setting(containerEl)
@@ -240,10 +300,7 @@ class CopyPlaintextSettingTab extends PluginSettingTab {
       .addToggle(t =>
         t
           .setValue(this.plugin.settings.removeFootnotes)
-          .onChange(async v => {
-            this.plugin.settings.removeFootnotes = v;
-            await this.plugin.saveSettings();
-          })
+          .onChange(async v => { this.plugin.settings.removeFootnotes = v; await this.plugin.saveSettings(); })
       );
 
     new Setting(containerEl)
@@ -252,10 +309,7 @@ class CopyPlaintextSettingTab extends PluginSettingTab {
       .addToggle(t =>
         t
           .setValue(this.plugin.settings.dehighlight)
-          .onChange(async v => {
-            this.plugin.settings.dehighlight = v;
-            await this.plugin.saveSettings();
-          })
+          .onChange(async v => { this.plugin.settings.dehighlight = v; await this.plugin.saveSettings(); })
       );
 
     new Setting(containerEl)
@@ -264,10 +318,7 @@ class CopyPlaintextSettingTab extends PluginSettingTab {
       .addToggle(t =>
         t
           .setValue(this.plugin.settings.removeForwardRefs)
-          .onChange(async v => {
-            this.plugin.settings.removeForwardRefs = v;
-            await this.plugin.saveSettings();
-          })
+          .onChange(async v => { this.plugin.settings.removeForwardRefs = v; await this.plugin.saveSettings(); })
       );
 
     new Setting(containerEl)
@@ -276,10 +327,52 @@ class CopyPlaintextSettingTab extends PluginSettingTab {
       .addToggle(t =>
         t
           .setValue(this.plugin.settings.unwrapBlockMath)
-          .onChange(async v => {
-            this.plugin.settings.unwrapBlockMath = v;
-            await this.plugin.saveSettings();
-          })
+          .onChange(async v => { this.plugin.settings.unwrapBlockMath = v; await this.plugin.saveSettings(); })
+      );
+
+    new Setting(containerEl)
+      .setName("Remove list numbers")
+      .setDesc("Strip leading `1. `, `2. `, etc.")
+      .addToggle(t =>
+        t
+          .setValue(this.plugin.settings.removeListNumbers)
+          .onChange(async v => { this.plugin.settings.removeListNumbers = v; await this.plugin.saveSettings(); })
+      );
+
+    new Setting(containerEl)
+      .setName("Normalize dashes")
+      .setDesc("Turn `---word---` into `word`, collapse runs of hyphens")
+      .addToggle(t =>
+        t
+          .setValue(this.plugin.settings.normalizeDashes)
+          .onChange(async v => { this.plugin.settings.normalizeDashes = v; await this.plugin.saveSettings(); })
+      );
+
+    new Setting(containerEl)
+      .setName("Strip hashtags")
+      .setDesc("Remove leading `#` from words")
+      .addToggle(t =>
+        t
+          .setValue(this.plugin.settings.stripHashtags)
+          .onChange(async v => { this.plugin.settings.stripHashtags = v; await this.plugin.saveSettings(); })
+      );
+
+    new Setting(containerEl)
+      .setName("Strip mentions")
+      .setDesc("Remove leading `@` from words")
+      .addToggle(t =>
+        t
+          .setValue(this.plugin.settings.stripMentions)
+          .onChange(async v => { this.plugin.settings.stripMentions = v; await this.plugin.saveSettings(); })
+      );
+
+    new Setting(containerEl)
+      .setName("Sanitize math commands")
+      .setDesc("Remove LaTeX commands (`\\quad`, `\\text`, `\\int`, etc.)")
+      .addToggle(t =>
+        t
+          .setValue(this.plugin.settings.sanitizeMath)
+          .onChange(async v => { this.plugin.settings.sanitizeMath = v; await this.plugin.saveSettings(); })
       );
   }
 }
