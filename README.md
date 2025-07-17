@@ -65,10 +65,8 @@
 
 ## Screenshots
 
-<!--
-![Settings panel](./screenshots/settings.png)
-![Context menu](./screenshots/context-menu.png)
--->
+![Settings panel](screenshots/settings.png)
+![Context menu](screenshots/context-menu.png)
 
 ---
 
@@ -83,7 +81,7 @@
 
 ## Support & Feedback
 
-- **GitHub Issues**: [Report bugs or request features](#)  
+- **GitHub Issues**: [Report bugs or request features](https://github.com/FinickySpider/Obsidian-Copy-as-Plaintext/issues)  
 - **Contact**: [FinickySpider on GitHub](https://github.com/FinickySpider)  
 - **Buy me a coffee**: [Ko-fi](https://ko-fi.com/FinickySpider)  
 
