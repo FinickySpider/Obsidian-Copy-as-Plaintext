@@ -62,7 +62,7 @@ export default class CopyPlaintextPlugin extends Plugin {
         if (!editor.getSelection()) return;
         menu.addItem(item =>
           item
-            .setTitle("Copy as Plain-Text")
+            .setTitle("Copy as plain-text")
             .setIcon("copy")
             .onClick(() => this.copySelection(editor))
         );
@@ -228,7 +228,6 @@ class CopyPlaintextSettingTab extends PluginSettingTab {
   display(): void {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl("h2", { text: "Copy As PlainText Settings" });
 
     new Setting(containerEl)
       .setName("Super Simple mode")
