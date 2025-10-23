@@ -1,7 +1,7 @@
 {
 	"id": "copy-plaintext",
 	"name": "Copy As PlainText",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"minAppVersion": "0.15.0",
 	"description": "Copy selections or entire notes as plain text. Both commands are available in the command palette; selection copy is also in the context menu.",
 	"author": "Finickyspider",
