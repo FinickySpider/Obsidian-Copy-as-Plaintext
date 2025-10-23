@@ -57,6 +57,12 @@ export default class CopyPlaintextPlugin extends Plugin {
       editorCallback: (editor: Editor) => this.copySelection(editor),
     });
 
+    this.addCommand({
+      id: "copy-plaintext-note",
+      name: "Copy entire note as plain-text",
+      editorCallback: (editor: Editor) => this.copyNote(editor),
+    });
+
     this.registerEvent(
       this.app.workspace.on("editor-menu", (menu, editor) => {
         if (!editor.getSelection()) return;
@@ -103,6 +109,31 @@ export default class CopyPlaintextPlugin extends Plugin {
     try {
       await navigator.clipboard.writeText(plain);
       new Notice("Copied as plain-text ✔️", 1500);
+    } catch (err) {
+      console.error(err);
+      new Notice("Copy failed – see console.");
+    }
+  }
+
+  private async copyNote(editor: Editor) {
+    const raw = editor.getValue();
+    if (!raw) {
+      new Notice("Note is empty.");
+      return;
+    }
+
+    let plain: string;
+    if (this.settings.superSimple) {
+      plain = this.simpleStrip(raw);
+    } else if (this.settings.useUnified) {
+      plain = this.unifiedStrip(raw);
+    } else {
+      plain = removeMd(raw);
+    }
+
+    try {
+      await navigator.clipboard.writeText(plain);
+      new Notice("Copied note as plain-text ✔️", 1500);
     } catch (err) {
       console.error(err);
       new Notice("Copy failed – see console.");
