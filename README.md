@@ -8,8 +8,6 @@
 ![GitHub stars](https://img.shields.io/github/stars/FinickySpider/Obsidian-Copy-as-Plaintext?style=social)
 
 
-![alt text](image.png)
-
 > [!IMPORTANT]
 > If you want to use *any* advanced/fine-tuning settings, make sure to **disable Simple Mode** in the plugin options. If Simple Mode is on, all advanced options are ignored.
 
