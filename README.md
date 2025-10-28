@@ -72,7 +72,7 @@
 
 ### Community 
 
-- Look for Copy As PlainText in Obsidian’s Community Plugins browser once accepted.
+- Search for 'Copy As PlainText' in Obsidian’s Community Plugins browser.
 
 <details> 
 <summary>Manual Installation - Click to expand</summary>
