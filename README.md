@@ -120,13 +120,13 @@
 ## FAQ
 
 **Q:** Why don’t my settings seem to do anything?  
-**A:** Make sure **Simple Mode** is turned *off* in the plugin settings, otherwise, advanced options are ignored for speed.
+**A:** Make sure **Simple Mode** is turned *off* in the plugin settings, otherwise, advanced options are ignored.
 
 **Q:** Can I copy images as plain text?  
 **A:** Yes. Markdown image links are stripped down to the alt/title text.
 
 **Q:** Does it handle custom Markdown plugins?  
-**A:** The AST-based mode covers most standard Markdown. Some third-party plugin syntax might not be recognized.
+**A:** The AST-based mode covers most standard Markdown. Some third-party plugin syntax might not be recognized. Though during my torture tests it covered most things. Let me know if you have requests for specific plugin stripping [Here](https://github.com/FinickySpider/Obsidian-Copy-as-Plaintext/issues)  
 
 **Q:** What’s the difference between Simple Mode and Unified/Remark?  
 **A:** Simple Mode is a fast, lightweight text-only method that strips Markdown using simple rules (think regex). It’s quick and works well for basic notes, but can make mistakes with complex formatting (code blocks, nested styling, HTML, tables, etc.). Unified/Remark parses the Markdown properly and removes formatting reliably. It’s slower, but the results are more accurate.
@@ -134,6 +134,8 @@
 ---
 
 ## Support & Feedback
+
+I'd love to hear from you, if you have feature requests, issues, questions, or just want to talk about it! I'm always happy to help tweak things or create niche features is needed.
 
 - GitHub Issues: [Report bugs or request features](https://github.com/FinickySpider/Obsidian-Copy-as-Plaintext/issues)  
 
