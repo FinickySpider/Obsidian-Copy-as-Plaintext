@@ -2,10 +2,10 @@
 
 **Clean, one-click plain-text copy from Obsidian!**
 
-![Latest release](https://img.shields.io/github/v/release/FinickySpider/Obsidian-Copy-as-Plaintext)
-![BSD 0-Clause license](https://img.shields.io/badge/license-BSD%200--Clause-blue)
-![Build status](https://img.shields.io/github/actions/workflow/status/FinickySpider/Obsidian-Copy-as-Plaintext/ci.yml?branch=main)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/FinickySpider/Obsidian-Copy-as-Plaintext?color=%23483699)
+![Downloads](https://img.shields.io/badge/dynamic/json?logo=obsidian&logoColor=white&color=%23483699&label=downloads&query=%24%5B%22copy-plaintext%22%5D.downloads&url=https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/community-plugin-stats.json)
 ![GitHub stars](https://img.shields.io/github/stars/FinickySpider/Obsidian-Copy-as-Plaintext?style=social)
+
 
 
 > [!IMPORTANT]
@@ -140,7 +140,7 @@
 ---
 
 ## License
-BSD 0-Clause – see [LICENSE](LICENSE)
+![BSD 0-Clause license](https://img.shields.io/badge/license-BSD%200--Clause-blue)
 
 ---
 
