@@ -6,3 +6,10 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
+
+/* FR-1: Indented sub-settings for Obsidian-specific options */
+.setting-indent {
+  padding-left: 2em;
+  border-left: 2px solid var(--background-modifier-border);
+  margin-left: 0.5em;
+}
