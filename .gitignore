@@ -10,7 +10,7 @@ node_modules
 
 # Don't include the compiled main.js file in the repo.
 # They should be uploaded to GitHub releases instead.
-main.js
+#main.js
 
 # Build output folder
 Copy PlainText/
@@ -24,3 +24,6 @@ data.json
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
 main.ts.backup.ts
+Copy PlainText.zip
+Copy PlainText-1.0.3-test.zip
+FR-1.md
