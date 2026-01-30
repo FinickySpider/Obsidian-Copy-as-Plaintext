@@ -148,8 +148,7 @@ I'd love to hear from you, if you have feature requests, issues, questions, or j
 
 *Built with ❤️ for Obsidian users who just want clean, copy-ready text.*
 
-<details>
-<summary><strong>Appreciate the script?</strong></summary>
+---
 
 If this script helped you, you can support it here:
 
@@ -158,4 +157,4 @@ If this script helped you, you can support it here:
 </a>
 
 _Thanks for visiting ☕_
-</details>
+
